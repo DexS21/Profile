@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random69</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .hidden {
+            display: none;
+        }
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .fadeIn {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        .profile-card {
+            background: #111;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        }
+        .profile-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-shadow: 0 0 10px white;
+        }
+        .start-button {
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            background: #000;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+        }
+        .start-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 25px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Volume control styles */
+        .volume-control {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #000;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+            font-size: 24px;
+            transition: width 0.3s ease-out;
+            overflow: hidden;
+            width: 50px; /* initial width */
+        }
+
+        .volume-control:hover {
+            width: 200px; /* Expanded width on hover */
+        }
+
+        .volume-control .volume-logo {
+            margin-right: 10px;
+            transition: margin-right 0.3s ease-out;
+        }
+
+        .volume-control:hover .volume-logo {
+            margin-right: 15px; /* Give some space when expanded */
+        }
+
+        .volume-slider-container {
+            display: none;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .volume-control:hover .volume-slider-container {
+            display: block;
+            opacity: 1;
+        }
+
+        .volume-slider {
+            width: 150px;
+            background: transparent;
+            border: none;
+            outline: none;
+            -webkit-appearance: none;
+            height: 5px;
+            border-radius: 5px;
+        }
+
+        .volume-slider::-webkit-slider-runnable-track {
+            background: #555;
+            height: 5px;
+            border-radius: 5px;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            background: #fff;
+            border-radius: 50%;
+            height: 20px;
+            width: 20px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="startScreen" class="container">
+        <button class="start-button" onclick="startExperience()">Enter</button>
+    </div>
+    <div id="mainScreen" class="container hidden fadeIn">
+        <div class="snow" id="snowContainer"></div>
+        <div class="profile-card">
+            <img src="Picture.png" alt="Profile">
+            <div class="profile-name">💻Random69💻</div>
+        </div>
+        <div id="volumeControl" class="volume-control">
+            <div class="volume-logo">🔊</div>
+            <div class="volume-slider-container">
+                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="1" oninput="updateVolume()">
+            </div>
+        </div>
+    </div>
+    <audio id="bgMusic" loop>
+        <source src="bring-me-back-283196.mp3" type="audio/mp3">
+    </audio>
+    <script>
+        function startExperience() {
+            document.getElementById("startScreen").classList.add("hidden");
+            document.getElementById("mainScreen").classList.remove("hidden");
+            document.getElementById("bgMusic").play();
+            generateSnow();  // Generate snowflakes on screen load
+        }
+
+        function generateSnow() {
+            const snowContainer = document.getElementById("snowContainer");
+            for (let i = 0; i < 150; i++) {
+                let snowflake = document.createElement("div");
+                snowflake.style.position = "absolute";
+                snowflake.style.left = Math.random() * 100 + "%";
+                snowflake.style.top = Math.random() * -50 + "px";
+                snowflake.style.width = snowflake.style.height = Math.random() * 5 + "px";
+                snowflake.style.background = "white";
+                snowflake.style.borderRadius = "50%";
+                snowflake.style.opacity = Math.random();
+                snowflake.style.animation = `fall ${Math.random() * 5 + 5}s linear infinite`;
+                snowContainer.appendChild(snowflake);
+            }
+        }
+
+        function updateVolume() {
+            const volume = document.getElementById("volumeSlider").value;
+            document.getElementById("bgMusic").volume = volume;
+        }
+
+        document.body.addEventListener("click", function () {
+            if (document.getElementById("startScreen").classList.contains("hidden")) {
+                return;
+            }
+            startExperience();
+        });
+    </script>
+</body>
+</html>
