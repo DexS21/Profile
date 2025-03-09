@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💻</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .hidden {
+      display: none;
+    }
+    .snow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .fadeIn {
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .profile-card {
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    .profile-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+    .profile-name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 10px;
+      color: white;
+      background: url('sparkle_white.gif') no-repeat center center;
+      background-size: contain;
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+    .start-button {
+      padding: 15px 30px;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      background: #000;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+    .start-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+    }
+    .volume-control {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #000;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      font-size: 24px;
+      transition: width 0.3s ease-out;
+      overflow: hidden;
+      width: 50px;
+    }
+    .volume-control:hover {
+      width: 200px;
+    }
+    .volume-control .volume-logo {
+      margin-right: 10px;
+      transition: margin-right 0.3s ease-out;
+    }
+    .volume-control:hover .volume-logo {
+      margin-right: 15px;
+    }
+    .volume-slider-container {
+      display: none;
+      transition: opacity 0.3s ease-out;
+    }
+    .volume-control:hover .volume-slider-container {
+      display: block;
+      opacity: 1;
+    }
+    .volume-slider {
+      width: 150px;
+      background: transparent;
+      border: none;
+      outline: none;
+      -webkit-appearance: none;
+      height: 5px;
+      border-radius: 5px;
+    }
+    .volume-slider::-webkit-slider-runnable-track {
+      background: #555;
+      height: 5px;
+      border-radius: 5px;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      background: #fff;
+      border-radius: 50%;
+      height: 20px;
+      width: 20px;
+      cursor: pointer;
+    }
+    .social-icons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      gap: 20px;
+      z-index: 5;
+    }
+    .social-icons a {
+      text-decoration: none;
+      transition: transform 0.3s ease-in-out;
+    }
+    .social-icons a:hover {
+      transform: scale(1.3);
+    }
+    .social-icons a:active {
+      transform: scale(1.2);
+    }
+    .social-icons img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      display: block;
+    }
+    .discord-icon {
+      width: 20px;
+      height: 20px;
+    }
+    .roblox-icon {
+      border: none;
+    }
+    .music-player {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(100vh);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px 25px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      display: none;
+      animation: popupAnimation 1s ease-out forwards;
+    }
+    @keyframes popupAnimation {
+      0% { transform: translateX(-50%) translateY(-100vh); opacity: 0; }
+      100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+    .music-player button {
+      background: #222;
+      border: none;
+      padding: 15px;
+      font-size: 20px;
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    .music-player button:hover {
+      background: #444;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      transform: scale(1.1);
+    }
+    #currentSong {
+      color: white;
+      font-size: 16px;
+    }
+    @keyframes fall {
+      to { transform: translateY(100vh); }
+    }
+  </style>
+</head>
+<body>
+  <div id="a" class="container">
+    <button class="start-button" onclick="b()">Click to enter</button>
+  </div>
+  <div id="c" class="container hidden fadeIn">
+    <div class="snow" id="d"></div>
+    <div class="profile-card">
+      <img src="Picture.png" alt="Profile">
+      <div class="profile-name">💻sethiddenproperty💻</div>
+    </div>
+    <div class="social-icons" id="f">
+      <a href="https://discord.gg/H4dMhRmQuP" target="_blank">
+        <img class="discord-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2nHeo6lNQM6sO5waCE4RNZlU-bnGWdc7RAg&s" alt="Discord">
+      </a>
+      <a href="https://www.youtube.com/@DexSExec" target="_blank">
+        <img src="https://cdn3.emoji.gg/emojis/54268-youtube.png" alt="YouTube">
+      </a>
+      <a href="https://www.roblox.com/users/8107393346/profile" target="_blank">
+        <img class="roblox-icon" src="https://i.pinimg.com/736x/0a/7f/fa/0a7ffaac014a38fac99d62596109932b.jpg" alt="Roblox">
+      </a>
+    </div>
+    <div id="g" class="volume-control">
+      <div class="volume-logo">🔊</div>
+      <div class="volume-slider-container">
+        <input type="range" id="h" class="volume-slider" min="0" max="1" step="0.01" value="1" oninput="i()">
+      </div>
+    </div>
+  </div>
+  <audio id="j" loop>
+    <source src="Bringmeback.mp3" type="audio/mp3">
+  </audio>
+  <div class="music-player" id="musicPlayer">
+    <button onclick="prevSong()">⏮️</button>
+    <button onclick="togglePlay()">▶️/⏸️</button>
+    <button onclick="nextSong()">⏭️</button>
+    <span id="currentSong">Now Playing: Bring Me Back</span>
+  </div>
+  <script>
+    let playlist = [
+      { name: "Bring Me Back", src: "Bringmeback.mp3" },
+      { name: "Dont Wake me up", src: "Dontwakemeup.mp3" },
+      { name: "RandomLuvesu", src: "Random69luvesu.mp3" }
+    ];
+    let currentSongIndex = 0;
+    let audio = document.getElementById("j");
+    function loadSong(index) {
+      let song = playlist[index];
+      audio.src = song.src;
+      audio.load();
+      document.getElementById("currentSong").innerText = `Now Playing: ${song.name}`;
+      audio.play();
+    }
+    function nextSong() {
+      currentSongIndex = (currentSongIndex + 1) % playlist.length;
+      loadSong(currentSongIndex);
+    }
+    function prevSong() {
+      currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+      loadSong(currentSongIndex);
+    }
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+    audio.addEventListener("ended", nextSong);
+    let k = '💻', l = 'Random69', m = 0;
+    function n() {
+      if (m < l.length) {
+        document.title = '💻' + l.slice(0, m + 1) + '💻';
+        m++;
+        setTimeout(n, 500);
+      } else {
+        setTimeout(() => { m = 0; n(); }, 2000);
+      }
+    }
+    function b() {
+      document.getElementById("a").classList.add("hidden");
+      document.getElementById("c").classList.remove("hidden");
+      document.getElementById("musicPlayer").style.display = "flex";
+      document.getElementById("j").play();
+      o();
+      n();
+      p();
+    }
+    function o() {
+      const q = document.getElementById("d");
+      for (let r = 0; r < 100; r++) {
+        let s = document.createElement("div");
+        s.style.position = "absolute";
+        s.style.left = Math.random() * 100 + "%";
+        s.style.top = Math.random() * -50 + "px";
+        s.style.width = s.style.height = Math.random() * 10 + 5 + "px";
+        s.style.background = "white";
+        s.style.borderRadius = "50%";
+        s.style.opacity = Math.random() * 0.6 + 0.4;
+        s.style.animation = `fall ${Math.random() * 5 + 5}s linear infinite`;
+        q.appendChild(s);
+      }
+    }
+    function i() {
+      const t = document.getElementById("h").value;
+      document.getElementById("j").volume = t;
+    }
+    function p() {
+      const u = localStorage.getItem('visitCount');
+      const v = u ? parseInt(u) : 0;
+      const w = v + 1;
+      localStorage.setItem('visitCount', w);
+    }
+    document.body.addEventListener("click", function() {
+      if (document.getElementById("a").classList.contains("hidden")) return;
+      b();
+    });
+  </script>
+</body>
+</html>
